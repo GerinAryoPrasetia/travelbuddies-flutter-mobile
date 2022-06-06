@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:travelbuddies_mobile/config.dart';
+import 'package:travelbuddies_mobile/models/destination_response_model.dart';
 import 'package:travelbuddies_mobile/models/login_request_model.dart';
 import 'package:travelbuddies_mobile/models/login_response_model.dart';
 import 'package:travelbuddies_mobile/models/register_request_model.dart';
@@ -49,4 +50,19 @@ class APIService {
 
     return registerResponseJson(response.body);
   }
+
+  // static Future<List<DestinationResponseModel>> getDestination() async {
+  //   Map<String, String> requestHeaders = {
+  //     'Content-Type': 'application/json',
+  //   };
+
+  //   var url = Uri.http(Config.apiURL, Config.registerApi);
+
+  //   var response = await client.get(
+  //     url,
+  //     headers: requestHeaders,
+  //   );
+
+  //   return destinationResponseJson(response.body);
+  // }
 }
