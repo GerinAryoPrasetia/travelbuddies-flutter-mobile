@@ -41,8 +41,8 @@ class Data {
     required this.age,
     required this.location,
     required this.role,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
   late final int id;
   late final String name;
@@ -51,8 +51,8 @@ class Data {
   late final String age;
   late final String location;
   late final String role;
-  late final String createdAt;
-  late final String updatedAt;
+  late final Null createdAt;
+  late final Null updatedAt;
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
