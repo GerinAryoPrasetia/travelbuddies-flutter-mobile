@@ -4,8 +4,18 @@ import 'package:travelbuddies_mobile/screens/auth/login_page.dart';
 import 'package:travelbuddies_mobile/screens/auth/register_page.dart';
 import 'package:travelbuddies_mobile/screens/home/home.dart';
 import 'package:travelbuddies_mobile/screens/splash_screen/splash.dart';
+import 'package:travelbuddies_mobile/services/shared_services.dart';
 
-void main() {
+Widget _defaultHome = const LoginPage();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool _result = await SharedServices.isLoggedIn();
+  if (_result) {
+    print(_result);
+    _defaultHome = const Home();
+  }
   runApp(const MyApp());
 }
 
@@ -24,9 +34,9 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.white,
         accentColor: HexColor("#EC8C6F"),
       ),
-      initialRoute: '/splash',
+      // initialRoute: '/splash',
       routes: {
-        '/': (context) => const Home(),
+        '/': (context) => _defaultHome,
         '/splash': (context) => const Splash(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage()

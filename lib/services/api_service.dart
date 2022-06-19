@@ -5,8 +5,10 @@ import 'package:travelbuddies_mobile/config.dart';
 import 'package:travelbuddies_mobile/models/destination_response_model.dart';
 import 'package:travelbuddies_mobile/models/login_request_model.dart';
 import 'package:travelbuddies_mobile/models/login_response_model.dart';
+import 'package:travelbuddies_mobile/models/plan_response.dart';
 import 'package:travelbuddies_mobile/models/register_request_model.dart';
 import 'package:travelbuddies_mobile/models/register_response_model.dart';
+import 'package:travelbuddies_mobile/models/user_response_model.dart';
 import 'package:travelbuddies_mobile/services/shared_services.dart';
 
 class APIService {
@@ -65,4 +67,43 @@ class APIService {
 
   //   return destinationResponseJson(response.body);
   // }
+
+  static Future<UserResponseModel> getUserProfile() async {
+    var loginDetails = await SharedServices.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http(Config.apiURL, '/api/user/${loginDetails.data.id}');
+
+    var response = await client.get(
+      url,
+      headers: requestHeaders,
+    );
+
+    //Shared Services
+    return userResponseJson(response.body);
+    // }
+  }
+
+  static Future<List<PlanResponseModel>> getUserPlan() async {
+    var loginDetails = await SharedServices.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http(Config.apiURL, '/api/user/${loginDetails.data.id}/plan');
+
+    var response = await client.get(
+      url,
+      headers: requestHeaders,
+    );
+    print(response.body);
+
+    //Shared Services
+    return planResponseJson(response.body);
+    // }
+  }
 }

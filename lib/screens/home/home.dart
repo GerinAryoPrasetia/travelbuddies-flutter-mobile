@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:travelbuddies_mobile/models/destination_response_model.dart';
+import 'package:travelbuddies_mobile/models/plan_response.dart';
+import 'package:travelbuddies_mobile/models/user_response_model.dart';
 import 'package:travelbuddies_mobile/screens/home/detail_destination.dart';
 import 'package:travelbuddies_mobile/services/api_service.dart';
 import 'package:travelbuddies_mobile/services/shared_services.dart';
@@ -64,30 +66,6 @@ class DestinationData {
       // createdAt: json['created_at'],
       // updatedAt: json['updated_at'],
     );
-  }
-}
-
-class UserData {
-  late final String id;
-  late final String name;
-  late final String age;
-  late final String location;
-  late final String email;
-
-  UserData(
-      {required this.id,
-      required this.name,
-      required this.age,
-      required this.email,
-      required this.location});
-
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
-        id: json['id'],
-        name: json['name'],
-        age: json['age'],
-        email: json['email'],
-        location: json['location']);
   }
 }
 
@@ -208,6 +186,92 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
+          ),
+          FutureBuilder<UserResponseModel>(
+            future: APIService.getUserProfile(),
+            builder:
+                (BuildContext context, AsyncSnapshot<UserResponseModel> model) {
+              if (model.hasData) {
+                print(model.data!.name);
+                return Center(
+                  child: Text(model.data!.name),
+                );
+              }
+              return const Text("Please Login");
+            },
+          ),
+          FutureBuilder<List<PlanResponseModel>>(
+            future: APIService.getUserPlan(),
+            builder: (context, snapshot) {
+              print(snapshot.hasData);
+              if (snapshot.hasData) {
+                List<PlanResponseModel> planData = snapshot.requireData;
+                print(planData);
+                return Container(
+                  height: 250.0,
+                  // width: double.infinity,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: planData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => DetailDestination(
+                          //           name: planData[index].destinationName!,
+                          //           location: planData[index].address,
+                          //           desc: planData[index].description,
+                          //           img: planData[index].image,
+                          //         ),
+                          //       ),
+                          //     );
+                          //   },
+                          //   child: Container(
+                          //     margin: const EdgeInsets.all(10.0),
+                          //     width: 150,
+                          //     height: 200,
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(10),
+                          //       image: DecorationImage(
+                          //         image: NetworkImage(
+                          //             destinationData[index].image),
+                          //         fit: BoxFit.cover,
+                          //         colorFilter: ColorFilter.mode(
+                          //             Colors.black.withOpacity(0.5),
+                          //             BlendMode.darken),
+                          //       ),
+                          //     ),
+                          //     // child: Column(
+                          //     //   mainAxisAlignment: MainAxisAlignment.end,
+                          //     //   children: <Widget>[
+
+                          //     //     SizedBox(
+                          //     //       height: 20.0,
+                          //     //     )
+                          //     //   ],
+                          //     // ),
+                          //   ),
+                          // ),
+                          Text(
+                            planData[index].destinationName!,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              }
+              return const Text('add Plan');
+            },
           ),
         ],
       ),
