@@ -5,7 +5,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:travelbuddies_mobile/models/destination_response_model.dart';
 import 'package:travelbuddies_mobile/models/plan_response.dart';
 import 'package:travelbuddies_mobile/models/user_response_model.dart';
+import 'package:travelbuddies_mobile/screens/account/account.dart';
+import 'package:travelbuddies_mobile/screens/destination/destination.dart';
 import 'package:travelbuddies_mobile/screens/home/detail_destination.dart';
+import 'package:travelbuddies_mobile/screens/plan/plan.dart';
 import 'package:travelbuddies_mobile/services/api_service.dart';
 import 'package:travelbuddies_mobile/services/shared_services.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +81,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Future<List<DestinationData>> futureData;
+  int currentIndex = 0;
 
   @override
   void initState() {
@@ -92,11 +96,56 @@ class _HomeState extends State<Home> {
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         children: [
-          const Padding(
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            child: FutureBuilder<UserResponseModel>(
+              future: APIService.getUserProfile(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<UserResponseModel> model) {
+                if (model.hasData) {
+                  print(model.data!.name);
+                  return Text(
+                    "Hi!, ${model.data!.name}",
+                    style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  );
+                }
+                return const Text("Please Login");
+              },
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Text(
-              'Best Destination',
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Best Destination",
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DestinationPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'See All',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           FutureBuilder<List<DestinationData>>(
@@ -170,7 +219,7 @@ class _HomeState extends State<Home> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-              return const CircularProgressIndicator();
+              return Center(child: const CircularProgressIndicator());
             },
           ),
           Padding(
@@ -180,25 +229,31 @@ class _HomeState extends State<Home> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Your Plan"),
-                    Text('See All'),
+                    Text(
+                      "Your Plan",
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlanPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'See All',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
-          ),
-          FutureBuilder<UserResponseModel>(
-            future: APIService.getUserProfile(),
-            builder:
-                (BuildContext context, AsyncSnapshot<UserResponseModel> model) {
-              if (model.hasData) {
-                print(model.data!.name);
-                return Center(
-                  child: Text(model.data!.name),
-                );
-              }
-              return const Text("Please Login");
-            },
           ),
           FutureBuilder<List<PlanResponseModel>>(
             future: APIService.getUserPlan(),
@@ -207,63 +262,49 @@ class _HomeState extends State<Home> {
               if (snapshot.hasData) {
                 List<PlanResponseModel> planData = snapshot.requireData;
                 print(planData);
-                return Container(
-                  height: 250.0,
-                  // width: double.infinity,
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
                   child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: planData.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Column(
                         children: [
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (context) => DetailDestination(
-                          //           name: planData[index].destinationName!,
-                          //           location: planData[index].address,
-                          //           desc: planData[index].description,
-                          //           img: planData[index].image,
-                          //         ),
-                          //       ),
-                          //     );
-                          //   },
-                          //   child: Container(
-                          //     margin: const EdgeInsets.all(10.0),
-                          //     width: 150,
-                          //     height: 200,
-                          //     decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(10),
-                          //       image: DecorationImage(
-                          //         image: NetworkImage(
-                          //             destinationData[index].image),
-                          //         fit: BoxFit.cover,
-                          //         colorFilter: ColorFilter.mode(
-                          //             Colors.black.withOpacity(0.5),
-                          //             BlendMode.darken),
-                          //       ),
-                          //     ),
-                          //     // child: Column(
-                          //     //   mainAxisAlignment: MainAxisAlignment.end,
-                          //     //   children: <Widget>[
-
-                          //     //     SizedBox(
-                          //     //       height: 20.0,
-                          //     //     )
-                          //     //   ],
-                          //     // ),
-                          //   ),
-                          // ),
-                          Text(
-                            planData[index].destinationName!,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color:
+                                    Theme.of(context).colorScheme.background),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    planData[index].destinationName!,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    planData[index].schedule!,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
+                          const SizedBox(
+                            height: 16.0,
+                          )
                         ],
                       );
                     },

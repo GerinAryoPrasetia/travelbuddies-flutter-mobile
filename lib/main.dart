@@ -3,6 +3,7 @@ import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:travelbuddies_mobile/screens/auth/login_page.dart';
 import 'package:travelbuddies_mobile/screens/auth/register_page.dart';
 import 'package:travelbuddies_mobile/screens/home/home.dart';
+import 'package:travelbuddies_mobile/screens/main_page.dart';
 import 'package:travelbuddies_mobile/screens/splash_screen/splash.dart';
 import 'package:travelbuddies_mobile/services/shared_services.dart';
 
@@ -13,8 +14,7 @@ void main() async {
 
   bool _result = await SharedServices.isLoggedIn();
   if (_result) {
-    print(_result);
-    _defaultHome = const Home();
+    _defaultHome = const MainPage();
   }
   runApp(const MyApp());
 }
@@ -32,7 +32,10 @@ class MyApp extends StatelessWidget {
         fontFamily: "Poppins",
         primaryColor: HexColor('#70DAD3'),
         backgroundColor: Colors.white,
-        accentColor: HexColor("#EC8C6F"),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: HexColor("#EC8C6F"),
+          background: HexColor("#DEFDFB"),
+        ),
       ),
       // initialRoute: '/splash',
       routes: {
