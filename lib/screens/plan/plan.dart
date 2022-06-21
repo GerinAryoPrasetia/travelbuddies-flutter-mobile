@@ -8,7 +8,9 @@ class PlanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Plan Page"),
+      body: SafeArea(
+        child: Text("Plan Page"),
+      ),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:travelbuddies_mobile/models/user_response_model.dart';
 import 'package:travelbuddies_mobile/screens/account/account.dart';
 import 'package:travelbuddies_mobile/screens/destination/destination.dart';
 import 'package:travelbuddies_mobile/screens/home/detail_destination.dart';
+import 'package:travelbuddies_mobile/screens/plan/add_plan.dart';
 import 'package:travelbuddies_mobile/screens/plan/plan.dart';
 import 'package:travelbuddies_mobile/services/api_service.dart';
 import 'package:travelbuddies_mobile/services/shared_services.dart';
@@ -27,13 +28,6 @@ Future<List<DestinationData>> fetchDestination() async {
     throw Exception('Unexpected error occured!');
   }
 }
-
-//TODO: get token from local data
-// Future<UserData> fetchUser() async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? token = prefs.getString('key');
-//   final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/user'));
-// }
 
 class DestinationData {
   late final int id;
@@ -170,12 +164,13 @@ class _HomeState extends State<Home> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailDestination(
-                                    name:
-                                        destinationData[index].destinationName,
-                                    location: destinationData[index].address,
-                                    desc: destinationData[index].description,
-                                    img: destinationData[index].image,
-                                  ),
+                                      name: destinationData[index]
+                                          .destinationName,
+                                      location: destinationData[index].address,
+                                      desc: destinationData[index].description,
+                                      img: destinationData[index].image,
+                                      address: destinationData[index].address,
+                                      price: destinationData[index].price),
                                 ),
                               );
                             },
@@ -264,54 +259,80 @@ class _HomeState extends State<Home> {
                 print(planData);
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: planData.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color:
-                                    Theme.of(context).colorScheme.background),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    planData[index].destinationName!,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0,
-                                    ),
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: planData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        planData[index].destinationName!,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                      Text(
+                                        planData[index].schedule!,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    planData[index].schedule!,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                          )
-                        ],
-                      );
-                    },
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      Center(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AddPlanPage(),
+                              ),
+                            );
+                          },
+                          child: Text('Add New Plan'),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }
-              return const Text('add Plan');
+              return GestureDetector(
+                child: const Center(
+                  child: Text(
+                    'add Plan',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                  ),
+                ),
+              );
             },
           ),
         ],

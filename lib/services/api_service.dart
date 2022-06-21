@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:travelbuddies_mobile/config.dart';
+import 'package:travelbuddies_mobile/models/add_plan_request_model.dart';
+import 'package:travelbuddies_mobile/models/add_plan_response_model.dart';
 import 'package:travelbuddies_mobile/models/destination_response_model.dart';
 import 'package:travelbuddies_mobile/models/login_request_model.dart';
 import 'package:travelbuddies_mobile/models/login_response_model.dart';
@@ -53,20 +55,24 @@ class APIService {
     return registerResponseJson(response.body);
   }
 
-  // static Future<List<DestinationResponseModel>> getDestination() async {
-  //   Map<String, String> requestHeaders = {
-  //     'Content-Type': 'application/json',
-  //   };
+  static Future<AddPlanResponseModel> addPlan(PlanRequestModel model) async {
+    var loginDetails = await SharedServices.loginDetails();
 
-  //   var url = Uri.http(Config.apiURL, Config.registerApi);
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
 
-  //   var response = await client.get(
-  //     url,
-  //     headers: requestHeaders,
-  //   );
+    var url =
+        Uri.http(Config.apiURL, '/api/user/${loginDetails?.data.id}/plan');
 
-  //   return destinationResponseJson(response.body);
-  // }
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+
+    return addPlanResponseJson(response.body);
+  }
 
   static Future<UserResponseModel> getUserProfile() async {
     var loginDetails = await SharedServices.loginDetails();
