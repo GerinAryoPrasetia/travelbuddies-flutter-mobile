@@ -36,8 +36,6 @@ class _DetailDestinationState extends State<DetailDestination> {
                 image: DecorationImage(
                   image: NetworkImage(widget.img),
                   fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.5), BlendMode.darken),
                 ),
               ),
             ),
@@ -76,7 +74,7 @@ class _DetailDestinationState extends State<DetailDestination> {
                         'Price : ',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(widget.price.toString())
+                      Text("Rp ${widget.price.toString()}")
                     ],
                   ),
                 ],

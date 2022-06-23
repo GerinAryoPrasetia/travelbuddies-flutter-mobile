@@ -189,15 +189,6 @@ class _HomeState extends State<Home> {
                                       BlendMode.darken),
                                 ),
                               ),
-                              // child: Column(
-                              //   mainAxisAlignment: MainAxisAlignment.end,
-                              //   children: <Widget>[
-
-                              //     SizedBox(
-                              //       height: 20.0,
-                              //     )
-                              //   ],
-                              // ),
                             ),
                           ),
                           Text(
@@ -318,19 +309,24 @@ class _HomeState extends State<Home> {
                               ),
                             );
                           },
-                          child: Text('Add New Plan'),
+                          child: const Text('Add New Plan'),
                         ),
                       ),
                     ],
                   ),
                 );
               }
-              return GestureDetector(
-                child: const Center(
-                  child: Text(
-                    'add Plan',
-                    style: TextStyle(decoration: TextDecoration.underline),
-                  ),
+              return Center(
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddPlanPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Add New Plan'),
                 ),
               );
             },

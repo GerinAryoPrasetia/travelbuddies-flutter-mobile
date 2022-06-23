@@ -5,6 +5,7 @@ import 'package:travelbuddies_mobile/config.dart';
 import 'package:travelbuddies_mobile/models/add_plan_request_model.dart';
 import 'package:travelbuddies_mobile/models/add_plan_response_model.dart';
 import 'package:travelbuddies_mobile/models/destination_response_model.dart';
+import 'package:travelbuddies_mobile/models/edit_user_request_model.dart';
 import 'package:travelbuddies_mobile/models/login_request_model.dart';
 import 'package:travelbuddies_mobile/models/login_response_model.dart';
 import 'package:travelbuddies_mobile/models/plan_response.dart';
@@ -111,5 +112,45 @@ class APIService {
     //Shared Services
     return planResponseJson(response.body);
     // }
+  }
+
+  static Future<bool> deletePlan(int id) async {
+    var loginDetails = await SharedServices.loginDetails();
+    Map<String, String> requestHeaders = {
+      // 'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http(Config.apiURL, '/api/plan/${id.toString()}');
+
+    var response = await client.delete(url, headers: requestHeaders);
+    print("ini response delete ${response.body}");
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> updateUser(EditUserRequestModel model, int id) async {
+    var loginDetails = await SharedServices.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http(Config.apiURL, '/api/user/${id.toString()}');
+
+    var response = await client.put(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

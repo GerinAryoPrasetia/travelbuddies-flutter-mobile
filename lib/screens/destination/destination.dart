@@ -76,96 +76,86 @@ class _MyWidgetState extends State<DestinationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Destinations"),
+      ),
       body: SafeArea(
         child: ListView(
           shrinkWrap: true,
+          scrollDirection: Axis.vertical,
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    "All Destination",
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                FutureBuilder<List<DestinationData>>(
-                    future: futureData,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<DestinationData> destinationData =
-                            snapshot.requireData;
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          // width: double.infinity,
-                          child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: destinationData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailDestination(
-                                            name: destinationData[index]
-                                                .destinationName,
-                                            location:
-                                                destinationData[index].address,
-                                            desc: destinationData[index]
-                                                .description,
-                                            img: destinationData[index].image,
-                                            price: destinationData[index].price,
-                                            address:
-                                                destinationData[index].address,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.all(10.0),
-                                      width: double.infinity,
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              destinationData[index].image),
-                                          fit: BoxFit.cover,
-                                          colorFilter: ColorFilter.mode(
-                                              Colors.black.withOpacity(0.5),
-                                              BlendMode.darken),
-                                        ),
+            FutureBuilder<List<DestinationData>>(
+                future: futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<DestinationData> destinationData =
+                        snapshot.requireData;
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      // width: double.infinity,
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: destinationData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailDestination(
+                                        name: destinationData[index]
+                                            .destinationName,
+                                        location:
+                                            destinationData[index].address,
+                                        desc:
+                                            destinationData[index].description,
+                                        img: destinationData[index].image,
+                                        price: destinationData[index].price,
+                                        address: destinationData[index].address,
                                       ),
                                     ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10.0),
+                                  width: double.infinity,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          destinationData[index].image),
+                                      fit: BoxFit.cover,
+                                      colorFilter: ColorFilter.mode(
+                                          Colors.black.withOpacity(0.5),
+                                          BlendMode.darken),
+                                    ),
                                   ),
-                                  Text(
-                                    destinationData[index].destinationName,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
-                      }
-                      return Center(child: const CircularProgressIndicator());
-                    })
-              ],
-            ),
+                                ),
+                              ),
+                              Text(
+                                destinationData[index].destinationName,
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return Center(child: const CircularProgressIndicator());
+                }),
           ],
         ),
       ),

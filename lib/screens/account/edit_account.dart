@@ -1,32 +1,38 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
-import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:travelbuddies_mobile/config.dart';
-import 'package:travelbuddies_mobile/models/login_request_model.dart';
-import 'package:travelbuddies_mobile/models/add_plan_request_model.dart';
+import 'package:travelbuddies_mobile/models/edit_user_request_model.dart';
 import 'package:travelbuddies_mobile/services/api_service.dart';
 
-class AddPlanPage extends StatefulWidget {
-  const AddPlanPage({Key? key}) : super(key: key);
+class EditAccountPage extends StatefulWidget {
+  final int userId;
+  final String name;
+  final String age;
+  final String email;
+  final String location;
+
+  EditAccountPage(
+      {required this.userId,
+      required this.name,
+      required this.age,
+      required this.email,
+      required this.location});
 
   @override
-  State<AddPlanPage> createState() => _AddPlanPageState();
+  State<EditAccountPage> createState() => _EditAccountPageState();
 }
 
-class _AddPlanPageState extends State<AddPlanPage> {
+class _EditAccountPageState extends State<EditAccountPage> {
   bool isApiCallProcess = false;
   bool hidePassword = true;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  String? destinationName;
-  String? schedule;
-  String? people;
-  String? items;
-  String? transportation;
+  String? name;
+  String? age;
+  String? email;
+  String? location;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               key: UniqueKey(),
               child: Form(
                 key: globalFormKey,
-                child: _addPlanUI(context),
+                child: _editAccountUI(context),
               ),
             )
           ],
@@ -56,7 +62,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
     );
   }
 
-  Widget _addPlanUI(BuildContext context) {
+  Widget _editAccountUI(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -64,8 +70,8 @@ class _AddPlanPageState extends State<AddPlanPage> {
         children: [
           FormHelper.inputFieldWidget(
             context,
-            "destinationName",
-            "Destination Name",
+            "name",
+            widget.name,
             (onValidateVal) {
               if (onValidateVal == null && onValidateVal.isEmpty) {
                 return "Destination Name Can\t be Empty";
@@ -73,7 +79,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               return null;
             },
             (onSavedVal) {
-              destinationName = onSavedVal;
+              name = onSavedVal;
             },
             prefixIcon: const Icon(Icons.place),
             showPrefixIcon: true,
@@ -86,8 +92,8 @@ class _AddPlanPageState extends State<AddPlanPage> {
           ),
           FormHelper.inputFieldWidget(
             context,
-            "schedule",
-            "Schedule",
+            "email",
+            widget.email,
             (onValidateVal) {
               if (onValidateVal == null && onValidateVal.isEmpty) {
                 return "Schedule Can\t be Empty";
@@ -95,7 +101,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               return null;
             },
             (onSavedVal) {
-              schedule = onSavedVal;
+              email = onSavedVal;
             },
             prefixIcon: const Icon(Icons.schedule),
             showPrefixIcon: true,
@@ -108,8 +114,8 @@ class _AddPlanPageState extends State<AddPlanPage> {
           ),
           FormHelper.inputFieldWidget(
             context,
-            "items",
-            "Items",
+            "age",
+            widget.age,
             (onValidateVal) {
               if (onValidateVal == null && onValidateVal.isEmpty) {
                 return "Schedule Can\t be Empty";
@@ -117,7 +123,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               return null;
             },
             (onSavedVal) {
-              items = onSavedVal;
+              age = onSavedVal;
             },
             prefixIcon: const Icon(Icons.backpack),
             showPrefixIcon: true,
@@ -130,8 +136,8 @@ class _AddPlanPageState extends State<AddPlanPage> {
           ),
           FormHelper.inputFieldWidget(
             context,
-            "people",
-            "People",
+            "location",
+            widget.location,
             (onValidateVal) {
               if (onValidateVal == null && onValidateVal.isEmpty) {
                 return "Schedule Can\t be Empty";
@@ -139,7 +145,7 @@ class _AddPlanPageState extends State<AddPlanPage> {
               return null;
             },
             (onSavedVal) {
-              people = onSavedVal;
+              location = onSavedVal;
             },
             prefixIcon: const Icon(Icons.person),
             showPrefixIcon: true,
@@ -150,62 +156,45 @@ class _AddPlanPageState extends State<AddPlanPage> {
           const SizedBox(
             height: 20.0,
           ),
-          FormHelper.inputFieldWidget(
-            context,
-            "transportation",
-            "Transportation",
-            (onValidateVal) {
-              if (onValidateVal == null && onValidateVal.isEmpty) {
-                return "Schedule Can\t be Empty";
-              }
-              return null;
-            },
-            (onSavedVal) {
-              transportation = onSavedVal;
-            },
-            prefixIcon: const Icon(Icons.train),
-            showPrefixIcon: true,
-            borderColor: Theme.of(context).primaryColor,
-            prefixIconColor: Theme.of(context).primaryColor,
-            borderFocusColor: Theme.of(context).accentColor,
-          ),
           const SizedBox(
             height: 20.0,
           ),
           Center(
             child: FormHelper.submitButton(
-              "Add Plan",
+              "Done",
               () {
                 if (validateAndSave()) {
                   setState(() {
                     isApiCallProcess = false;
                   });
-                  PlanRequestModel model = PlanRequestModel(
-                    destinationName: destinationName!,
-                    people: people!,
-                    items: items!,
-                    schedule: schedule!,
-                    transportation: transportation!,
+                  EditUserRequestModel model = EditUserRequestModel(
+                    name: name!,
+                    age: age!,
+                    location: location!,
+                    email: email!,
                   );
 
-                  APIService.addPlan(model).then((response) => {
-                        setState(() {
-                          isApiCallProcess = false;
-                        }),
-                        if (response.data != null)
-                          {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/', (route) => false),
-                          }
-                        else
-                          {
-                            FormHelper.showSimpleAlertDialog(
-                                context, Config.appName, "Invalid Data", "OK",
-                                () {
-                              Navigator.pop(context);
-                            })
-                          }
-                      });
+                  APIService.updateUser(model, widget.userId)
+                      .then((response) => {
+                            setState(() {
+                              isApiCallProcess = false;
+                            }),
+                            if (response)
+                              {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/account', (route) => false),
+                              }
+                            else
+                              {
+                                FormHelper.showSimpleAlertDialog(
+                                    context,
+                                    Config.appName,
+                                    "Please fill all form",
+                                    "OK", () {
+                                  Navigator.pop(context);
+                                })
+                              }
+                          });
                 }
               },
               btnColor: Theme.of(context).primaryColor,

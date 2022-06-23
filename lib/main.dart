@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:travelbuddies_mobile/screens/account/account.dart';
 import 'package:travelbuddies_mobile/screens/auth/login_page.dart';
 import 'package:travelbuddies_mobile/screens/auth/register_page.dart';
 import 'package:travelbuddies_mobile/screens/home/home.dart';
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => _defaultHome,
         '/splash': (context) => const Splash(),
         '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage()
+        '/register': (context) => const RegisterPage(),
+        '/account': (context) => const AccountPage(),
       },
     );
   }

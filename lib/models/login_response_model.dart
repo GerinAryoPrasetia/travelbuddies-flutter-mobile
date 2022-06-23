@@ -47,12 +47,12 @@ class Data {
   late final int id;
   late final String name;
   late final String email;
-  late final Null emailVerifiedAt;
+  late final String? emailVerifiedAt;
   late final String age;
   late final String location;
   late final String role;
-  late final Null createdAt;
-  late final Null updatedAt;
+  late final String? createdAt;
+  late final String? updatedAt;
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
