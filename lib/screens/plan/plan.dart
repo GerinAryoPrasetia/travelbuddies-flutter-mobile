@@ -83,35 +83,34 @@ class _PlanPageState extends State<PlanPage> {
                                           () {
                                             APIService.deletePlan(
                                                     planData[index].id!)
-                                                .then((value) => {
-                                                      setState(() {
-                                                        apiCallProcess = false;
-                                                      }),
-                                                      if (value)
-                                                        {
-                                                          {
-                                                            Navigator
-                                                                .pushNamedAndRemoveUntil(
-                                                                    context,
-                                                                    '/',
-                                                                    (route) =>
-                                                                        false),
-                                                          }
-                                                        }
-                                                      else
-                                                        {
-                                                          FormHelper
-                                                              .showSimpleAlertDialog(
-                                                                  context,
-                                                                  Config
-                                                                      .appName,
-                                                                  "Gagal",
-                                                                  "OK", () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          })
-                                                        }
-                                                    });
+                                                .then(
+                                              (value) => {
+                                                setState(() {
+                                                  apiCallProcess = false;
+                                                }),
+                                                if (value)
+                                                  {
+                                                    {
+                                                      Navigator
+                                                          .pushNamedAndRemoveUntil(
+                                                              context,
+                                                              '/',
+                                                              (route) => false),
+                                                    }
+                                                  }
+                                                else
+                                                  {
+                                                    FormHelper
+                                                        .showSimpleAlertDialog(
+                                                            context,
+                                                            Config.appName,
+                                                            "Gagal",
+                                                            "OK", () {
+                                                      Navigator.pop(context);
+                                                    })
+                                                  }
+                                              },
+                                            );
                                           },
                                         ),
                                       ),

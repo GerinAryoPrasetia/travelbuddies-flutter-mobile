@@ -39,7 +39,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Add New Plan"),
+        title: Text("Edit Your Account"),
       ),
       body: SafeArea(
         child: Column(
@@ -182,7 +182,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                             if (response)
                               {
                                 Navigator.pushNamedAndRemoveUntil(
-                                    context, '/account', (route) => false),
+                                    context, '/', (route) => false),
                               }
                             else
                               {

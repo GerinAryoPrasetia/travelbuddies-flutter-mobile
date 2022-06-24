@@ -26,6 +26,7 @@ class _DetailDestinationState extends State<DetailDestination> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text(widget.name)),
       body: SafeArea(
         child: Column(
           children: [

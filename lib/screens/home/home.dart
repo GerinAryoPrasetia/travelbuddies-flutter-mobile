@@ -164,13 +164,14 @@ class _HomeState extends State<Home> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailDestination(
-                                      name: destinationData[index]
-                                          .destinationName,
-                                      location: destinationData[index].address,
-                                      desc: destinationData[index].description,
-                                      img: destinationData[index].image,
-                                      address: destinationData[index].address,
-                                      price: destinationData[index].price),
+                                    name:
+                                        destinationData[index].destinationName,
+                                    location: destinationData[index].address,
+                                    desc: destinationData[index].description,
+                                    img: destinationData[index].image,
+                                    address: destinationData[index].address,
+                                    price: destinationData[index].price,
+                                  ),
                                 ),
                               );
                             },
@@ -194,8 +195,9 @@ class _HomeState extends State<Home> {
                           Text(
                             destinationData[index].destinationName,
                             style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       );
